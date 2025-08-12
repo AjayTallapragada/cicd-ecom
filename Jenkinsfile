@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        nodejs 'node16' // Change this to whatever NodeJS name is in Jenkins Global Tool Configuration
+        nodejs "node16" // Name from NodeJS plugin configuration
     }
 
     stages {
@@ -26,7 +26,9 @@ pipeline {
 
         stage('Deploy to Nginx') {
             steps {
-                sh 'sudo cp -r build/* /var/www/html/'
+                sh 'sudo rm -rf /var/www/html/*'
+                sh 'sudo cp -r dist/* /var/www/html/'
+                sh 'sudo systemctl restart nginx'
             }
         }
     }
