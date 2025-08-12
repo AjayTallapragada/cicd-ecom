@@ -14,21 +14,23 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'npm install'
+                bat 'npm install'
             }
         }
 
         stage('Build') {
             steps {
-                sh 'npm run build'
+                bat 'npm run build'
             }
         }
 
-        stage('Deploy to Nginx') {
+        stage('Deploy to IIS') {
             steps {
-                sh 'sudo rm -rf /var/www/html/*'
-                sh 'sudo cp -r dist/* /var/www/html/'
-                sh 'sudo systemctl restart nginx'
+                // Delete old files
+                bat 'del /Q C:\\inetpub\\wwwroot\\*'
+                
+                // Copy new build to IIS folder
+                bat 'xcopy dist C:\\inetpub\\wwwroot /E /H /C /I'
             }
         }
     }
